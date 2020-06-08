@@ -3,3 +3,4 @@
 build/
 nbactions.xml
 /src/test/
+target/
