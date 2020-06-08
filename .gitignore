@@ -2,6 +2,4 @@
 
 build/
 nbactions.xml
-
-
-
+/src/test/
