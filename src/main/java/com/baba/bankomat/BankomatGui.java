@@ -78,6 +78,10 @@ public class BankomatGui extends javax.swing.JFrame {
         btn_Card = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        mainMenuBar = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        enableDevMode = new javax.swing.JRadioButtonMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bankomaten");
@@ -220,6 +224,7 @@ public class BankomatGui extends javax.swing.JFrame {
 
         btn_blank_right.setBackground(new java.awt.Color(204, 204, 204));
         btn_blank_right.setText("Pin");
+        btn_blank_right.setEnabled(false);
         btn_blank_right.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_blank_rightActionPerformed(evt);
@@ -277,6 +282,18 @@ public class BankomatGui extends javax.swing.JFrame {
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
+
+        jMenu1.setText("File");
+
+        enableDevMode.setText("Enable DevMode");
+        jMenu1.add(enableDevMode);
+
+        mainMenuBar.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        mainMenuBar.add(jMenu2);
+
+        setJMenuBar(mainMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -381,7 +398,7 @@ public class BankomatGui extends javax.swing.JFrame {
                         .addComponent(btn9, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_blank_right, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -421,18 +438,18 @@ public class BankomatGui extends javax.swing.JFrame {
 
     private void btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn1ActionPerformed
 
-        buildCardNumber("1");
+        enterCredentials("1");
 
     }//GEN-LAST:event_btn1ActionPerformed
 
     private void btn4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn4ActionPerformed
 
-        buildCardNumber("4");
+        enterCredentials("4");
     }//GEN-LAST:event_btn4ActionPerformed
 
     private void btn7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn7ActionPerformed
 
-        buildCardNumber("7");
+        enterCredentials("7");
     }//GEN-LAST:event_btn7ActionPerformed
 
     private void btn_blank_leftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_blank_leftActionPerformed
@@ -441,49 +458,50 @@ public class BankomatGui extends javax.swing.JFrame {
 
     private void btn0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn0ActionPerformed
 
-        buildCardNumber("0");
+        enterCredentials("0");
     }//GEN-LAST:event_btn0ActionPerformed
 
     private void btn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn2ActionPerformed
 
-        buildCardNumber("2");
+        enterCredentials("2");
     }//GEN-LAST:event_btn2ActionPerformed
 
     private void btn8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn8ActionPerformed
 
-        buildCardNumber("8");
+        enterCredentials("8");
     }//GEN-LAST:event_btn8ActionPerformed
 
     private void btn5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn5ActionPerformed
 
-        buildCardNumber("5");
+        enterCredentials("5");
     }//GEN-LAST:event_btn5ActionPerformed
 
     private void btn3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn3ActionPerformed
 
-        buildCardNumber("3");
+        enterCredentials("3");
     }//GEN-LAST:event_btn3ActionPerformed
 
     private void btn_blank_rightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_blank_rightActionPerformed
         // TODO: Lagra pinkod i pin variabeln
+        if (enableDevMode.isArmed()) {
+            Scanner input = new Scanner(System.in);
 
-        Scanner input = new Scanner(System.in);
-
-        System.out.println("Skriv pinkod: ");
-
-        cardPin = input.nextLine();
+            System.out.println("Skriv pinkod: ");
+            btn_blank_right.setEnabled(false);
+            cardPin = input.nextLine();
+        }
 
 
     }//GEN-LAST:event_btn_blank_rightActionPerformed
 
     private void btn6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn6ActionPerformed
 
-        buildCardNumber("6");
+        enterCredentials("6");
     }//GEN-LAST:event_btn6ActionPerformed
 
     private void btn9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn9ActionPerformed
 
-        buildCardNumber("9");
+        enterCredentials("9");
     }//GEN-LAST:event_btn9ActionPerformed
 
     private void btn_ClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ClearActionPerformed
@@ -497,6 +515,8 @@ public class BankomatGui extends javax.swing.JFrame {
                 conn.close();
                 conn = null;
                 System.out.println("Connection closed");
+                btn_Card.setEnabled(true);
+                btn_blank_right.setEnabled(false);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -563,11 +583,16 @@ public class BankomatGui extends javax.swing.JFrame {
     private void btn_CardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CardActionPerformed
 
         // TODO: Ta bort scanner när knapparna fungerar...
-        Scanner input = new Scanner(System.in);
+        if (enableDevMode.isArmed()) {
+            Scanner input = new Scanner(System.in);
 
-        System.out.println("Skriv ditt kortnummer: ");
-        cardNumber = input.nextLine();
-
+            System.out.println("Skriv ditt kortnummer: ");
+            btn_Card.setEnabled(false);
+            cardNumber = input.nextLine();
+            btn_blank_right.setEnabled(true);
+        }
+        // FIX: Programmet fungerar inte om man disable kortknappen här, då fungerar inte enterCredentials metoden.
+        //btn_Card.setEnabled(false);
         // Koppls upp mot databasen.
         try {
 
@@ -581,14 +606,53 @@ public class BankomatGui extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btn_CardActionPerformed
 
-    private void buildCardNumber(String number) {
-        if (cardNumber.length() <= 4) {
-            cardNumber = cardNumber + number;
-        } else {
+    private void enterCredentials(String number) {
+        if (btn_Card.isEnabled()) {
 
-            System.out.println("Cardnumber is full...");
+            if (cardNumber.length() != 4) {
+
+                System.out.println("CardNumber : " + cardNumber);
+                System.out.println("CardNumber Length : " + cardNumber.length());
+
+                cardNumber = cardNumber + number;
+
+                System.out.println("CardNumber : " + cardNumber);
+                System.out.println("CardNumber Length : " + cardNumber.length());
+
+                if (cardNumber.length() == 4) {
+                    btn_Card.setEnabled(false);
+                    btn_blank_right.setEnabled(true);
+                }
+
+            } else {
+
+                System.out.println("Cardnumber is full..." + cardNumber);
+
+            }
+
+        } else if (btn_blank_right.isEnabled()) {
+
+            if (cardPin.length() != 4) {
+
+                System.out.println("CardPin : " + cardPin);
+                System.out.println("CardPin Length : " + cardPin.length());
+
+                cardPin = cardPin + number;
+                System.out.println("CardPin : " + cardPin);
+                System.out.println("CardPin Length : " + cardPin.length());
+
+                if (cardPin.length() == 4) {
+                    btn_Card.setEnabled(false);
+                    btn_blank_right.setEnabled(false);
+                }
+
+            } else {
+
+                System.out.println("CardPin is full..." + cardPin);
+            }
 
         }
+
     }
 
     private void showApplicationStatus() {
@@ -663,12 +727,16 @@ public class BankomatGui extends javax.swing.JFrame {
     private javax.swing.JButton btn_Enter;
     private javax.swing.JButton btn_blank_left;
     private javax.swing.JButton btn_blank_right;
+    private javax.swing.JRadioButtonMenuItem enableDevMode;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JButton left_Btn1;
     private javax.swing.JButton left_Btn2;
     private javax.swing.JButton left_Btn3;
     private javax.swing.JButton left_Btn4;
+    private javax.swing.JMenuBar mainMenuBar;
     private javax.swing.JButton right_Btn1;
     private javax.swing.JButton right_Btn2;
     private javax.swing.JButton right_Btn3;
